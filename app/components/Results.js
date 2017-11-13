@@ -60,6 +60,9 @@ class Results extends React.Component {
             players.playerOneName,
             players.playerTwoName
         ]).then(function (players) {
+
+            console.log("what are players ", players);
+
             if (players === null) {
                 return this.setState(function () {
                     return {

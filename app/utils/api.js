@@ -1,7 +1,7 @@
 var axios = require('axios');
 
 var id = "YOUR_CLIENT_ID";
-var token = "532383cecaaeafe5f389c504e796e8b46d1af09c";
+var token = "YOUR_ACCESS_TOKEN";
 var params = "?access_token=" + token;
 
 function getProfile (username) {
