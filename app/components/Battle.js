@@ -1,6 +1,6 @@
-var React = require('react');
-var PropTypes = require('prop-types');
-var Link = require('react-router-dom').Link;
+const React = require('react');
+const PropTypes = require('prop-types');
+const Link = require('react-router-dom').Link;
 
 function PlayerPreview (props) {
     return (
@@ -39,15 +39,17 @@ class PlayerInput extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    handleChange(event) {
-        var value = event.target.value;
 
-        this.setState(function () {
-            return {
-                username: value
-            }
-        });
+    /*
+        Event values should never be set directly as events are long
+        gone by the time setState runs. So wrto events values must be
+        stored before setting them in a state.
+     */
+    handleChange(event) {
+        const value = event.target.value;
+        this.setState(() => ({ username: value }))
     }
+
     handleSubmit(event) {
         event.preventDefault();
 
@@ -57,21 +59,24 @@ class PlayerInput extends React.Component {
         );
     }
     render() {
+        const { label } = this.props;
+        const { username } = this.state;
+
         return (
             <form className='column' onSubmit={this.handleSubmit}>
-                <label className='header' htmlFor='username'>{this.props.label}</label>
+                <label className='header' htmlFor='username'>{label}</label>
                 <input
                     id='username'
                     placeholder='github username'
                     type='text'
-                    value={this.state.username}
+                    value={username}
                     autoComplete='off'
                     onChange={this.handleChange}
                 />
                 <button
                     className='button'
                     type='submit'
-                    disabled={!this.state.username}>
+                    disabled={!username}>
                     Submit
                 </button>
             </form>
@@ -102,28 +107,24 @@ class Battle extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleReset = this.handleReset.bind(this);
     }
+
     handleSubmit(id, username) {
-        this.setState(function () {
-            var newState = {};
-            newState[id + 'Name'] = username;
-            newState[id + 'Image'] = 'https://github.com/' + username + '.png?size=200'
-            return newState;
-        });
+        this.setState(() => ({
+            [id + 'Name']: username,
+            [id + 'Image']: `https://github.com/${username}.png?size=200`
+        }));
     }
+
     handleReset(id) {
-        this.setState(function () {
-            var newState = {};
-            newState[id + 'Name'] = '';
-            newState[id + 'Image'] = null;
-            return newState;
-        })
+        this.setState(() => ({
+            [id + 'Name']: '',
+            [id + 'Image']: null
+        }));
     }
+
     render() {
-        var match = this.props.match;
-        var playerOneName = this.state.playerOneName;
-        var playerOneImage = this.state.playerOneImage;
-        var playerTwoName = this.state.playerTwoName;
-        var playerTwoImage = this.state.playerTwoImage;
+        var { match } = this.props;
+        const { playerOneName, playerOneImage, playerTwoName, playerTwoImage } = this.state;
 
         return (
             <div>
@@ -164,7 +165,7 @@ class Battle extends React.Component {
                     className='button'
                     to={{
                         pathname: match.url + '/results',
-                        search: '?playerOneName=' + playerOneName + '&playerTwoName=' + playerTwoName
+                        search: `?playerOneName=${playerOneName}&playerTwoName=${playerTwoName}`
                     }}>
                     Battle
                 </Link>}
