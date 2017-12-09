@@ -1,6 +1,6 @@
-const React = require('react');
-const PropTypes = require('prop-types');
-const api = require('../utils/api');
+import React from 'react';
+import PropTypes from 'prop-types';
+import api from '../utils/api';
 
 class SelectLanguage extends React.Component {
 
@@ -61,21 +61,16 @@ SelectLanguage.propTypes = {
 };
 
 class Popular extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectedLanguage: 'All',
-            repos: null
-        };
-
-        this.updateLanguage = this.updateLanguage.bind(this);
-    }
+    state = {
+        selectedLanguage: 'All',
+        repos: null
+    };
 
     componentDidMount(){
         this.updateLanguage(this.state.selectedLanguage);
     }
 
-    updateLanguage(lang) {
+    updateLanguage = (lang) => {
         this.setState(() => {
             return {
                 selectedLanguage: lang,
@@ -90,7 +85,7 @@ class Popular extends React.Component {
                 };
             })
         });
-    }
+    };
 
     render() {
 
@@ -108,4 +103,4 @@ class Popular extends React.Component {
     }
 }
 
-module.exports = Popular;
+export default Popular;
