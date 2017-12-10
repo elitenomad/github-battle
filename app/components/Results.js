@@ -49,33 +49,31 @@ class Results extends React.Component {
         loading: true,
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         const {playerOneName, playerTwoName} = queryString.parse(this.props.location.search);
 
-        api.battle([
+        const players = api.battle([
             playerOneName,
             playerTwoName
-        ]).then((players) => {
+        ]);
 
-            console.log("what are players ", players);
 
-            if (players === null) {
-                return this.setState(() => {
-                    return {
-                        error: 'Looks like there was an error. Check that both users exist on Github.',
-                        loading: false,
-                    }
-                });
-            }
-
-            this.setState(() => {
+        if (players === null) {
+            return this.setState(() => {
                 return {
-                    error: null,
-                    winner: players[0],
-                    loser: players[1],
+                    error: 'Looks like there was an error. Check that both users exist on Github.',
                     loading: false,
                 }
             });
+        }
+
+        this.setState(() => {
+            return {
+                error: null,
+                winner: players[0],
+                loser: players[1],
+                loading: false,
+            }
         });
     }
     render() {

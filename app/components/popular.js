@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import api from '../utils/api';
+import {fetchPopularRepos, battle} from '../utils/api';
 
 class SelectLanguage extends React.Component {
 
@@ -70,7 +70,7 @@ class Popular extends React.Component {
         this.updateLanguage(this.state.selectedLanguage);
     }
 
-    updateLanguage = (lang) => {
+    updateLanguage = async (lang) => {
         this.setState(() => {
             return {
                 selectedLanguage: lang,
@@ -78,13 +78,12 @@ class Popular extends React.Component {
             }
         });
 
-        api.fetchPopularRepos(lang).then((repos) => {
-            this.setState(() => {
-                return {
-                    repos: repos
-                };
-            })
-        });
+        const repos = await fetchPopularRepos(lang);
+        this.setState(() => {
+            return {
+                repos: repos
+            };
+        })
     };
 
     render() {
